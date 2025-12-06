@@ -306,35 +306,39 @@
             }, 300);
         }
     </script>
-<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2d/js/lib/L2Dwidget.min.js"></script>
+<script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
 <script>
-    L2Dwidget.init({
-        "model": {
-            // 这里是初音未来模型的网络地址
-            jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json",
-            "scale": 1
-        },
-        "display": {
-            "position": "right", // 显示在右下角，不挡左边的文字
-            "width": 200,        // 宽度，可以调整小人的大小
-            "height": 400,       // 高度
-            "hOffset": 0,        // 水平偏移量
-            "vOffset": -20       // 垂直偏移量，负数表示往下移
-        },
-        "mobile": {
-            "show": false,       // 在手机上是否显示（建议为 false，否则太挡屏幕）
-            "scale": 0.5
-        },
-        "react": {
-            "opacityDefault": 1, // 默认透明度 (1是不透明)
-            "opacityOnHover": 1  // 鼠标放上去的透明度
-        }
-    });
+    // 确保网页加载完成后再执行
+    window.onload = function() {
+        L2Dwidget.init({
+            "model": {
+                // 初音未来模型的稳定地址
+                jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json",
+                "scale": 1
+            },
+            "display": {
+                "position": "right", // 右下角
+                "width": 150,        // 宽度
+                "height": 300,       // 高度
+                "hOffset": 0,
+                "vOffset": -20
+            },
+            "mobile": {
+                "show": true,       // 【重点】手机上也显示（方便你测试）
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 1,
+                "opacityOnHover": 0.2
+            }
+        });
+    }
 </script>
 </body>
 
 </html>
+
 
 
 
