@@ -305,6 +305,15 @@
                 textObj.style.opacity = "1"; 
             }, 300);
         }
+        // --- 3D 倾斜特效配置 ---
+    // 自动找到所有带 .card 类的卡片，让它们动起来
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+        max: 10,            // 最大倾斜角度 (度数)，数值越大倾斜越狠
+        speed: 400,         // 倾斜的转换速度 (毫秒)
+        glare: true,        // 开启“反光/高光”效果 (最关键的一点！)
+        "max-glare": 0.3,   // 反光的强度 (0-1)，0.3 比较自然
+        scale: 1.02         // 鼠标放上去时，卡片稍微放大一点点
+    });
     </script>
 <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
@@ -335,9 +344,11 @@
         });
     }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
 </body>
 
 </html>
+
 
 
 
