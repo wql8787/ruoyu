@@ -195,17 +195,15 @@
             </div>
         </div>
 
-        <div class="card card-duality">
-            <div style="text-align: center;">
-                <div class="duality-icon" style="font-size: 2rem;">💊</div>
-                <div style="font-weight: 700; margin-top: 5px; color: var(--accent-blue);">Medical</div>
-                <div style="font-size: 0.75rem; color: var(--text-sub);">Care & Science</div>
+        <div class="card" style="grid-area: duality; justify-content: center; text-align: center; padding: 20px; flex-direction: column;">
+            <div style="font-size: 1.5rem; margin-bottom: 10px;">💬</div>
+            
+            <div id="hitokoto" style="font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center;">
+                正在连接异世界...
             </div>
-            <div class="duality-divider"></div>
-            <div style="text-align: center;">
-                <div class="duality-icon" style="font-size: 2rem;">👾</div>
-                <div style="font-weight: 700; margin-top: 5px; color: var(--accent-pink);">Creative</div>
-                <div style="font-size: 0.75rem; color: var(--text-sub);">Art & Code</div>
+            
+            <div id="hitokoto_from" style="font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%;">
+                
             </div>
         </div>
 
@@ -245,7 +243,17 @@
         VanillaTilt.init(document.querySelectorAll(".card"), {
             max: 10, speed: 400, glare: true, "max-glare": 0.3, scale: 1.02
         });
-
+// --- 一言 API 调用 ---
+        fetch('https://v1.hitokoto.cn')
+            .then(response => response.json())
+            .then(data => {
+                const hitokoto = document.getElementById('hitokoto');
+                const from = document.getElementById('hitokoto_from');
+                hitokoto.innerText = `“ ${data.hitokoto} ”`;
+                // 如果有出处就显示，没有就显示“佚名”
+                from.innerText = `—— ${data.from_who || ''} «${data.from}»`;
+            })
+            .catch(console.error);
         window.onload = function() {
             L2Dwidget.init({
                 "model": { jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json", "scale": 1 },
@@ -257,6 +265,7 @@
     </script>
 </body>
 </html>
+
 
 
 
