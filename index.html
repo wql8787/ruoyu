@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>若愚 | Portal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💗</text></svg>">
+    
     <style>
         :root {
             --text-main: #1d1d1f;
@@ -24,7 +26,7 @@
             overflow-x: hidden; position: relative;
         }
 
-        /* --- 背景层 --- */
+        /* --- 1. 背景层 --- */
         .liquid-bg {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
             background-image: url('bg.png'); 
@@ -35,21 +37,25 @@
         .blob-2 { width: 400px; height: 400px; background: #a9cce3; bottom: -50px; right: -50px; animation-duration: 12s; animation-delay: -5s; }
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
 
-        /* --- 核心布局 (修复版) --- */
+        /* --- 2. 核心网格布局 --- */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(3, minmax(150px, auto));
             gap: var(--gap);
             max-width: 1000px; width: 100%;
-            /* 布局定义：把 music 加回来了，放在 status 旁边 */
+            /* 布局图解：
+               [ 简介 2x2 ] [ 简介 2x2 ] [ 心电图 2x1 (宽) ] [ 心电图 2x1 (宽) ]
+               [ 简介 2x2 ] [ 简介 2x2 ] [ 状态 1x1 ]        [ 音乐 1x1 ]
+               [ 一言 2x1 (宽) ]         [ 一言 2x1 (宽) ]   [ 邮箱 1x1 ] [ 猫咪 1x1 ]
+            */
             grid-template-areas: 
-                "profile profile map map"
+                "profile profile ecg ecg"
                 "profile profile status music"
-                "duality duality contact pet";
+                "hitokoto hitokoto contact pet";
         }
 
-        /* --- 卡片通用 --- */
+        /* --- 3. 卡片通用样式 --- */
         .card {
             background: var(--card-glass);
             backdrop-filter: blur(40px) saturate(180%);
@@ -71,6 +77,8 @@
         }
 
         /* --- 卡片细节 --- */
+        
+        /* 1. Profile (个人简介) */
         .card-profile { grid-area: profile; }
         .avatar {
             width: 88px; height: 88px; border-radius: 50%;
@@ -83,35 +91,24 @@
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
         .tag { background: rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        .card-map { grid-area: map; background: rgba(230, 240, 255, 0.6); flex-direction: row; align-items: center; gap: 20px; }
-        .icon-large { font-size: 2.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-
-        /* 状态卡片 (改回小尺寸以适应音乐) */
-        .card-status { grid-area: status; background: rgba(28, 28, 30, 0.9); color: white; border: none; justify-content: center; align-items: center; text-align: center; }
+        /* 2. Status (状态 - 缩小版) */
+        .card-status { 
+            grid-area: status; background: rgba(28, 28, 30, 0.9); color: white; border: none; 
+            justify-content: center; align-items: center; text-align: center;
+        }
         .status-dot { width: 10px; height: 10px; background: #32d74b; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 15px rgba(50, 215, 75, 0.8); animation: breathe 3s infinite ease-in-out; }
 
-        .card-duality { grid-area: duality; flex-direction: row; align-items: center; justify-content: space-around; }
-        .duality-divider { width: 1px; height: 60px; background: rgba(0,0,0,0.1); }
-        .duality-icon { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-
-        .card-contact {
-            grid-area: contact; background: rgba(255, 255, 255, 0.8);
-            justify-content: center; align-items: center; text-align: center;
-            padding: 10px !important; cursor: default;
-        }
-        .email-text { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-top: 5px; word-break: break-all; }
-        .mail-icon { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
-
-        /* --- 音乐卡片 (迷你正方形版) --- */
+        /* 3. Music (网易云黑胶版) */
         .card-music {
             grid-area: music;
             background: rgba(255, 255, 255, 0.65); cursor: pointer;
             justify-content: center; align-items: center; padding: 15px !important; overflow: hidden;
+            border-top: 3px solid #dd001b; /* 网易红顶边 */
         }
         .music-cover {
             width: 80px; height: 80px; border-radius: 50%;
             background-image: url('cover.jpg'); background-size: cover; background-position: center;
-            border: 4px solid #1a1a1a; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 6px solid #1a1a1a; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: transform 0.5s; position: relative; z-index: 2;
         }
         .card-music.playing .music-cover { animation: spin 4s linear infinite; }
@@ -119,23 +116,39 @@
         .bar { width: 4px; background: #dd001b; border-radius: 2px; height: 4px; animation: equalizer 1s infinite ease-in-out; animation-play-state: paused; }
         .card-music.playing .bar { animation-play-state: running; }
 
-        /* --- 萌宠卡片 (使用本地图片 pet.gif) --- */
+        /* 4. Hitokoto (一言 - 替换了 Duality) */
+        .card-hitokoto { 
+            grid-area: hitokoto; justify-content: center; text-align: center; padding: 20px; 
+            flex-direction: column; background: rgba(255, 255, 255, 0.75);
+        }
+        #hitokoto { font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
+        #hitokoto_from { font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%; }
+
+        /* 5. Contact (迷你纯展示) */
+        .card-contact {
+            grid-area: contact; background: rgba(255, 255, 255, 0.8);
+            justify-content: center; align-items: center; text-align: center;
+            padding: 10px !important; cursor: default;
+        }
+        .email-text { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-top: 5px; word-break: break-all; }
+        .mail-icon { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
+
+        /* 6. Pet (赛博猫咪 + 计数器) */
         .card-pet {
-            grid-area: pet;
-            background: rgba(255, 255, 255, 0.65);
+            grid-area: pet; background: rgba(255, 255, 255, 0.65);
             flex-direction: column; justify-content: center; align-items: center;
             padding: 10px !important; gap: 8px;
         }
-        .pet-gif {
-            width: 50px; image-rendering: pixelated; filter: drop-shadow(0 3px 3px rgba(0,0,0,0.1));
-        }
+        .pet-gif { width: 50px; image-rendering: pixelated; filter: drop-shadow(0 3px 3px rgba(0,0,0,0.1)); }
         .counter-box { background: rgba(0, 0, 0, 0.06); padding: 4px 8px; border-radius: 6px; text-align: center; }
         .counter-label { font-size: 0.6rem; font-weight: 800; color: #aaa; letter-spacing: 1px; margin-bottom: 2px; display: block; }
 
+        /* 动画关键帧 */
         @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
         @keyframes equalizer { 0%, 100% { height: 4px; } 50% { height: 15px; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
+        /* 移动端适配 */
         @media (max-width: 768px) {
             .bento-grid { grid-template-columns: 1fr; grid-template-areas: unset; grid-template-rows: auto; }
             .card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 160px; }
@@ -145,7 +158,7 @@
 </head>
 <body>
 
-    <audio id="bgm-player" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm-player" loop crossorigin="anonymous"><source src="bgm.mp3" type="audio/mpeg"></audio>
 
     <div class="liquid-bg">
         <div class="blob blob-1"></div>
@@ -170,66 +183,24 @@
             </div>
         </div>
 
-        <div class="card" style="grid-area: map; background: #0f0f0f; overflow: hidden; position: relative; padding: 0; border: 1px solid #333;">
-            
-            <div style="position: absolute; width: 100%; height: 100%; 
-                        background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 3px);
-                        background-size: 100% 4px;"></div>
-
-            <div style="position: absolute; top: 15px; left: 20px; z-index: 2;">
-                <div style="font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--accent-pink); letter-spacing: 1px; font-weight: bold;">
-                    ● YEAR SYNC
-                </div>
-                <div id="year-progress" style="font-family: 'Courier New', monospace; font-size: 1.4rem; font-weight: bold; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.5); margin-top: 2px;">
-                    00.0000000%
-                </div>
+        <div class="card" style="grid-area: ecg; background: #111; overflow: hidden; position: relative; padding: 0; border: 1px solid #333;">
+            <div style="position: absolute; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px;"></div>
+            <div style="position: absolute; top: 15px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 2;">
+                <div style="font-family: 'Courier New', monospace; font-weight: bold; color: var(--accent-pink); font-size: 0.8rem; letter-spacing: 1px;">● AUDIO LINK</div>
+                <div style="font-family: 'Courier New', monospace; font-weight: bold; color: var(--accent-blue); font-size: 0.8rem; text-shadow: 0 0 5px var(--accent-blue);">SYNC: ACTIVE</div>
             </div>
-
-            <div style="position: absolute; top: 15px; right: 20px; text-align: right; z-index: 2;">
-                <div style="font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--accent-blue); letter-spacing: 1px; font-weight: bold;">
-                    DAY ENERGY
-                </div>
-                <div id="day-progress" style="font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: bold; color: var(--accent-blue); margin-top: 2px;">
-                    100.0%
-                </div>
-            </div>
-
-            <svg viewBox="0 0 500 100" style="width: 100%; height: 60%; position: absolute; bottom: 0; opacity: 0.5;">
-                <polyline points="0,80 100,80 120,50 140,80 160,80 180,20 200,80 220,80 500,80" 
-                          fill="none" stroke="var(--accent-blue)" stroke-width="1.5" stroke-linejoin="round">
-                    <animateTransform attributeName="transform" type="translate" from="500,0" to="-500,0" dur="5s" repeatCount="indefinite" />
-                </polyline>
+            <svg viewBox="0 0 500 100" preserveAspectRatio="none" style="width: 100%; height: 100%; position: absolute; top: 0; opacity: 0.8;">
+                <defs><filter id="glow"><feGaussianBlur stdDeviation="2.5" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                <polyline id="ecg-line" points="0,50 500,50" fill="none" stroke="var(--accent-pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"></polyline>
             </svg>
-            
-            <div style="position: absolute; bottom: 8px; left: 20px; font-family: monospace; font-size: 0.6rem; color: #555;">
-                UNIX: <span id="unix-time">0000000000</span>
+            <div style="position: absolute; bottom: 40px; left: 20px; font-family: monospace; color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55;">
+                <div style="font-size: 1.2rem;">♥ AUDIO VISUALIZER</div>
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px; color: #fff;">Real-time Frequency</div>
+            </div>
+            <div style="position: absolute; bottom: 10px; left: 20px; font-family: monospace; font-size: 0.7rem; color: rgba(255,255,255,0.5); white-space: nowrap; overflow: hidden; width: 80%;">
+                <span id="cyber-log">Waiting for audio input...</span>
             </div>
         </div>
-
-        <script>
-            function updateTimeFlow() {
-                const now = new Date();
-                
-                // 1. 计算今年过去了多少 (Year Sync)
-                const startOfYear = new Date(now.getFullYear(), 0, 1);
-                const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
-                const yearProgress = (now - startOfYear) / (endOfYear - startOfYear) * 100;
-                // toFixed(7) 保留7位小数，让它看起来在飞速跳动
-                document.getElementById('year-progress').innerText = yearProgress.toFixed(7) + "%";
-
-                // 2. 计算今天还剩多少 (Day Energy)
-                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-                const dayProgress = 100 - ((now - startOfDay) / (endOfDay - startOfDay) * 100);
-                document.getElementById('day-progress').innerText = dayProgress.toFixed(2) + "%";
-
-                // 3. Unix 时间戳
-                document.getElementById('unix-time').innerText = Math.floor(now.getTime() / 1000);
-            }
-
-            // 极速刷新 (每30毫秒刷新一次，产生肉眼可见的数字流动感)
-            setInterval(updateTimeFlow, 30);
-        </script>
 
         <div class="card card-status">
             <div>
@@ -248,16 +219,10 @@
             </div>
         </div>
 
-        <div class="card" style="grid-area: duality; justify-content: center; text-align: center; padding: 20px; flex-direction: column;">
+        <div class="card card-hitokoto">
             <div style="font-size: 1.5rem; margin-bottom: 10px;">💬</div>
-            
-            <div id="hitokoto" style="font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center;">
-                正在连接异世界...
-            </div>
-            
-            <div id="hitokoto_from" style="font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%;">
-                
-            </div>
+            <div id="hitokoto">正在连接异世界...</div>
+            <div id="hitokoto_from"></div>
         </div>
 
         <div class="card card-contact">
@@ -265,48 +230,26 @@
             <div class="email-text">383502661<br>@qq.com</div>
         </div>
 
-<div class="card card-pet">
+        <div class="card card-pet">
             <img src="pet.gif" class="pet-gif" alt="Pet" onerror="this.src='https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca_w200.gif'">
-            
             <div class="counter-box">
                 <span class="counter-label">VISITORS</span>
-                <img src="https://count.getloli.com/get/@wangqili-doki-final?theme=rule34" 
-                     alt="Count" 
-                     style="height: 35px; display: block; image-rendering: pixelated;">
+                <img src="https://count.getloli.com/get/@wangqili-doki-final?theme=rule34" alt="Count" style="height: 35px; display: block; image-rendering: pixelated;">
             </div>
         </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
     <script>
-        function toggleMusic() {
-            var audio = document.getElementById("bgm-player");
-            var card = document.getElementById("music-card");
-            if (audio.paused) {
-                audio.volume = 0.3; audio.play();
-                card.classList.add("playing");
-            } else {
-                audio.pause();
-                card.classList.remove("playing");
-            }
-        }
-
+        // --- 1. 3D 倾斜特效 ---
         VanillaTilt.init(document.querySelectorAll(".card"), {
             max: 10, speed: 400, glare: true, "max-glare": 0.3, scale: 1.02
         });
-// --- 一言 API 调用 ---
-        fetch('https://v1.hitokoto.cn')
-            .then(response => response.json())
-            .then(data => {
-                const hitokoto = document.getElementById('hitokoto');
-                const from = document.getElementById('hitokoto_from');
-                hitokoto.innerText = `“ ${data.hitokoto} ”`;
-                // 如果有出处就显示，没有就显示“佚名”
-                from.innerText = `—— ${data.from_who || ''} «${data.from}»`;
-            })
-            .catch(console.error);
+
+        // --- 2. 看板娘 (初音未来) ---
         window.onload = function() {
             L2Dwidget.init({
                 "model": { jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json", "scale": 1 },
@@ -315,9 +258,83 @@
                 "react": { "opacityDefault": 1, "opacityOnHover": 0.2 }
             });
         }
+
+        // --- 3. 一言 API ---
+        fetch('https://v1.hitokoto.cn')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('hitokoto').innerText = `“ ${data.hitokoto} ”`;
+                document.getElementById('hitokoto_from').innerText = `—— ${data.from_who || ''} «${data.from}»`;
+            })
+            .catch(console.error);
+
+        // --- 4. BGM 驱动心电图可视化 (核心逻辑) ---
+        let audioContext, analyser, dataArray, source;
+        let isAudioSetup = false;
+        const ecgLine = document.getElementById('ecg-line');
+        const svgWidth = 500; 
+        const svgHeight = 100; 
+        const centerY = svgHeight / 2; 
+        const totalPoints = 100; 
+
+        function setupAudio() {
+            if (isAudioSetup) return;
+            const audioElement = document.getElementById("bgm-player");
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 512; 
+            source = audioContext.createMediaElementSource(audioElement);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            const bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+            isAudioSetup = true;
+            document.getElementById('cyber-log').innerText = "Audio Link Established. Visualizing...";
+            drawECG();
+        }
+
+        function drawECG() {
+            requestAnimationFrame(drawECG);
+            const audioElement = document.getElementById("bgm-player");
+            if (!isAudioSetup || audioElement.paused) {
+                ecgLine.setAttribute('points', `0,${centerY} ${svgWidth},${centerY}`);
+                return;
+            }
+            analyser.getByteFrequencyData(dataArray);
+            let pointsStr = "";
+            const stepX = svgWidth / totalPoints;
+            for (let i = 0; i <= totalPoints; i++) {
+                const audioValue = dataArray[i * 2] || 0; 
+                const offset = (audioValue / 255) * (svgHeight / 2) * 0.8; 
+                const x = i * stepX;
+                const direction = (i % 2 === 0) ? 1 : -1;
+                const y = centerY + (offset * direction);
+                pointsStr += `${x},${y} `;
+            }
+            ecgLine.setAttribute('points', pointsStr.trim());
+        }
+
+        // --- 5. 音乐播放控制 (集成初始化) ---
+        function toggleMusic() {
+            var audio = document.getElementById("bgm-player");
+            var card = document.getElementById("music-card");
+            
+            // 第一次点击时初始化音频环境
+            if (!isAudioSetup) { setupAudio(); }
+            if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
+
+            if (audio.paused) {
+                audio.volume = 0.3; audio.play();
+                card.classList.add("playing");
+            } else {
+                audio.pause();
+                card.classList.remove("playing");
+            }
+        }
     </script>
 </body>
 </html>
+
 
 
 
