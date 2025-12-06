@@ -44,11 +44,6 @@
             grid-template-rows: repeat(3, minmax(150px, auto));
             gap: var(--gap);
             max-width: 1000px; width: 100%;
-            /* 布局图解：
-               [ 简介 2x2 ] [ 简介 2x2 ] [ 心电图 2x1 (宽) ] [ 心电图 2x1 (宽) ]
-               [ 简介 2x2 ] [ 简介 2x2 ] [ 状态 1x1 ]        [ 音乐 1x1 ]
-               [ 一言 2x1 (宽) ]         [ 一言 2x1 (宽) ]   [ 邮箱 1x1 ] [ 猫咪 1x1 ]
-            */
             grid-template-areas: 
                 "profile profile ecg ecg"
                 "profile profile status music"
@@ -78,7 +73,7 @@
 
         /* --- 卡片细节 --- */
         
-        /* 1. Profile (个人简介) */
+        /* 1. Profile */
         .card-profile { grid-area: profile; }
         .avatar {
             width: 88px; height: 88px; border-radius: 50%;
@@ -91,7 +86,7 @@
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
         .tag { background: rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* 2. Status (状态 - 缩小版) */
+        /* 2. Status */
         .card-status { 
             grid-area: status; background: rgba(28, 28, 30, 0.9); color: white; border: none; 
             justify-content: center; align-items: center; text-align: center;
@@ -103,7 +98,7 @@
             grid-area: music;
             background: rgba(255, 255, 255, 0.65); cursor: pointer;
             justify-content: center; align-items: center; padding: 15px !important; overflow: hidden;
-            border-top: 3px solid #dd001b; /* 网易红顶边 */
+            border-top: 3px solid #dd001b; 
         }
         .music-cover {
             width: 80px; height: 80px; border-radius: 50%;
@@ -116,7 +111,7 @@
         .bar { width: 4px; background: #dd001b; border-radius: 2px; height: 4px; animation: equalizer 1s infinite ease-in-out; animation-play-state: paused; }
         .card-music.playing .bar { animation-play-state: running; }
 
-        /* 4. Hitokoto (一言 - 替换了 Duality) */
+        /* 4. Hitokoto (一言) */
         .card-hitokoto { 
             grid-area: hitokoto; justify-content: center; text-align: center; padding: 20px; 
             flex-direction: column; background: rgba(255, 255, 255, 0.75);
@@ -124,7 +119,7 @@
         #hitokoto { font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
         #hitokoto_from { font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%; }
 
-        /* 5. Contact (迷你纯展示) */
+        /* 5. Contact (纯展示) */
         .card-contact {
             grid-area: contact; background: rgba(255, 255, 255, 0.8);
             justify-content: center; align-items: center; text-align: center;
@@ -133,7 +128,7 @@
         .email-text { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-top: 5px; word-break: break-all; }
         .mail-icon { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
 
-        /* 6. Pet (赛博猫咪 + 计数器) */
+        /* 6. Pet (像素猫) */
         .card-pet {
             grid-area: pet; background: rgba(255, 255, 255, 0.65);
             flex-direction: column; justify-content: center; align-items: center;
@@ -143,12 +138,10 @@
         .counter-box { background: rgba(0, 0, 0, 0.06); padding: 4px 8px; border-radius: 6px; text-align: center; }
         .counter-label { font-size: 0.6rem; font-weight: 800; color: #aaa; letter-spacing: 1px; margin-bottom: 2px; display: block; }
 
-        /* 动画关键帧 */
         @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
         @keyframes equalizer { 0%, 100% { height: 4px; } 50% { height: 15px; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* 移动端适配 */
         @media (max-width: 768px) {
             .bento-grid { grid-template-columns: 1fr; grid-template-areas: unset; grid-template-rows: auto; }
             .card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 160px; }
@@ -244,12 +237,12 @@
     <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
     <script>
-        // --- 1. 3D 倾斜特效 ---
+        // 1. Vanilla Tilt 3D
         VanillaTilt.init(document.querySelectorAll(".card"), {
             max: 10, speed: 400, glare: true, "max-glare": 0.3, scale: 1.02
         });
 
-        // --- 2. 看板娘 (初音未来) ---
+        // 2. Live2D Miku
         window.onload = function() {
             L2Dwidget.init({
                 "model": { jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json", "scale": 1 },
@@ -259,7 +252,7 @@
             });
         }
 
-        // --- 3. 一言 API ---
+        // 3. Hitokoto
         fetch('https://v1.hitokoto.cn')
             .then(response => response.json())
             .then(data => {
@@ -268,7 +261,7 @@
             })
             .catch(console.error);
 
-        // --- 4. BGM 驱动心电图可视化 (核心逻辑) ---
+        // 4. Audio Visualizer (Right Half Only)
         let audioContext, analyser, dataArray, source;
         let isAudioSetup = false;
         const ecgLine = document.getElementById('ecg-line');
@@ -301,12 +294,21 @@
                 return;
             }
             analyser.getByteFrequencyData(dataArray);
-            let pointsStr = "";
-            const stepX = svgWidth / totalPoints;
+            
+            // 定义波形只在右半边跳动
+            const startX = svgWidth / 2; 
+            const drawableWidth = svgWidth - startX;
+            const stepX = drawableWidth / totalPoints;
+            let pointsStr = `0,${centerY} ${startX},${centerY} `; // 左边画直线
+
             for (let i = 0; i <= totalPoints; i++) {
-                const audioValue = dataArray[i * 2] || 0; 
-                const offset = (audioValue / 255) * (svgHeight / 2) * 0.8; 
-                const x = i * stepX;
+                // 取样逻辑
+                let audioIndex = Math.floor(i * (dataArray.length / totalPoints) * 0.5); 
+                if (audioIndex >= dataArray.length) audioIndex = dataArray.length - 1;
+                const audioValue = dataArray[audioIndex] || 0; 
+                
+                const offset = (audioValue / 255) * (svgHeight / 2) * 0.7; 
+                const x = startX + (i * stepX);
                 const direction = (i % 2 === 0) ? 1 : -1;
                 const y = centerY + (offset * direction);
                 pointsStr += `${x},${y} `;
@@ -314,12 +316,11 @@
             ecgLine.setAttribute('points', pointsStr.trim());
         }
 
-        // --- 5. 音乐播放控制 (集成初始化) ---
+        // 5. Music Control
         function toggleMusic() {
             var audio = document.getElementById("bgm-player");
             var card = document.getElementById("music-card");
             
-            // 第一次点击时初始化音频环境
             if (!isAudioSetup) { setupAudio(); }
             if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
 
