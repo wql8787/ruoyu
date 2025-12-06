@@ -261,14 +261,12 @@
             </div>
         </div>
 
-        <div class="card card-contact" id="contact-card" onclick="showAndCopyEmail()">
+        <div class="card card-contact" id="contact-card" style="cursor: default;">
             <div id="contact-text">383502661@qq.com</div>
-            <div id="contact-icon" class="arrow">↗</div>
-        </div>
+            </div>
 
     </div> <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
-
 
     <script>
         // --- 音乐播放控制 ---
@@ -289,27 +287,7 @@
             }
         }
 
-        // --- 邮箱显示与复制 ---
-        function showAndCopyEmail() {
-            var myEmail = "383502661@qq.com"; 
-
-            var textObj = document.getElementById("contact-text");
-            var iconObj = document.getElementById("contact-icon");
-
-            navigator.clipboard.writeText(myEmail).catch(function() {});
-
-            textObj.style.opacity = "0"; 
-            iconObj.style.display = "none"; 
-
-            setTimeout(function() {
-                textObj.innerText = myEmail; 
-                textObj.style.fontSize = "1.3rem"; 
-                textObj.style.opacity = "1"; 
-            }, 300);
-        }
-
         // --- 3D 倾斜特效初始化 ---
-        // (现在库已经在上面引入了，这里运行就不会报错了)
         VanillaTilt.init(document.querySelectorAll(".card"), {
             max: 10,            
             speed: 400,         
@@ -344,7 +322,6 @@
         }
     </script>
 </body>
-
 </html>
 
 
