@@ -261,14 +261,12 @@
             </div>
         </div>
 
-        <div class="card card-contact" id="contact-card" onclick="showAndCopyEmail()">
-            <div id="contact-text">Get in Touch.</div>
-            <div id="contact-icon" class="arrow">↗</div>
-        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
-    </div>
 
     <script>
+        // --- 音乐播放控制 ---
         function toggleMusic() {
             var audio = document.getElementById("bgm-player");
             var card = document.getElementById("music-card");
@@ -286,8 +284,8 @@
             }
         }
 
+        // --- 邮箱显示与复制 ---
         function showAndCopyEmail() {
-            // 【在这里填你的真实邮箱】
             var myEmail = "383502661@qq.com"; 
 
             var textObj = document.getElementById("contact-text");
@@ -295,59 +293,55 @@
 
             navigator.clipboard.writeText(myEmail).catch(function() {});
 
-            // 视觉逻辑：隐藏箭头 -> 换文字 -> 文字浮现
             textObj.style.opacity = "0"; 
-            iconObj.style.display = "none"; // 直接隐藏箭头，不再显示对号，保证居中
+            iconObj.style.display = "none"; 
 
             setTimeout(function() {
                 textObj.innerText = myEmail; 
-                textObj.style.fontSize = "1.3rem"; // 邮箱字号稍微小一点点适配
+                textObj.style.fontSize = "1.3rem"; 
                 textObj.style.opacity = "1"; 
             }, 300);
         }
-        // --- 3D 倾斜特效配置 ---
-    // 自动找到所有带 .card 类的卡片，让它们动起来
-    VanillaTilt.init(document.querySelectorAll(".card"), {
-        max: 10,            // 最大倾斜角度 (度数)，数值越大倾斜越狠
-        speed: 400,         // 倾斜的转换速度 (毫秒)
-        glare: true,        // 开启“反光/高光”效果 (最关键的一点！)
-        "max-glare": 0.3,   // 反光的强度 (0-1)，0.3 比较自然
-        scale: 1.02         // 鼠标放上去时，卡片稍微放大一点点
-    });
-    </script>
-<script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
-<script>
-    // 确保网页加载完成后再执行
-    window.onload = function() {
-        L2Dwidget.init({
-            "model": {
-                // 初音未来模型的稳定地址
-                jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json",
-                "scale": 1
-            },
-            "display": {
-                "position": "right", // 右下角
-                "width": 150,        // 宽度
-                "height": 300,       // 高度
-                "hOffset": 0,
-                "vOffset": -20
-            },
-            "mobile": {
-                "show": true,       // 【重点】手机上也显示（方便你测试）
-                "scale": 0.5
-            },
-            "react": {
-                "opacityDefault": 1,
-                "opacityOnHover": 0.2
-            }
+        // --- 3D 倾斜特效初始化 ---
+        // (现在库已经在上面引入了，这里运行就不会报错了)
+        VanillaTilt.init(document.querySelectorAll(".card"), {
+            max: 10,            
+            speed: 400,         
+            glare: true,        
+            "max-glare": 0.3,   
+            scale: 1.02         
         });
-    }
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+
+        // --- 初音未来看板娘初始化 ---
+        window.onload = function() {
+            L2Dwidget.init({
+                "model": {
+                    jsonPath: "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json",
+                    "scale": 1
+                },
+                "display": {
+                    "position": "right", 
+                    "width": 150,        
+                    "height": 300,       
+                    "hOffset": 0,
+                    "vOffset": -20
+                },
+                "mobile": {
+                    "show": true,       
+                    "scale": 0.5
+                },
+                "react": {
+                    "opacityDefault": 1,
+                    "opacityOnHover": 0.2
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
+
 
 
 
