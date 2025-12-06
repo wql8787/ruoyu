@@ -183,6 +183,17 @@
             .card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 160px; }
             .liquid-bg { background-attachment: scroll; } 
         }
+        /* --- 看板娘缩放设置 --- */
+#waifu {
+    /* 0.7 代表 70% 大小，你可以改成 0.5 (一半) 或 0.8 */
+    transform: scale(0.7) !important; 
+    
+    /* 这一行很重要：保证她缩小的时候是贴着“左下角”缩的，不会飘到半空中 */
+    transform-origin: bottom left !important;
+    
+    /* 如果你觉得她还是挡字，可以试着把下面这一行解除注释，把她稍微往左移出屏幕一点点 */
+    /* left: -20px !important; */
+}
     </style>
 </head>
 <body>
@@ -310,3 +321,4 @@
 </body>
 
 </html>
+
