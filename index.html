@@ -26,7 +26,7 @@
             overflow-x: hidden; position: relative;
         }
 
-        /* --- 1. 背景层 --- */
+        /* 1. 背景层 */
         .liquid-bg {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
             background-image: url('bg.png'); 
@@ -37,7 +37,7 @@
         .blob-2 { width: 400px; height: 400px; background: #a9cce3; bottom: -50px; right: -50px; animation-duration: 12s; animation-delay: -5s; }
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
 
-        /* --- 2. 核心网格布局 --- */
+        /* 2. 核心网格布局 */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -50,7 +50,7 @@
                 "hitokoto hitokoto contact pet";
         }
 
-        /* --- 3. 卡片通用样式 --- */
+        /* 3. 卡片通用样式 */
         .card {
             background: var(--card-glass);
             backdrop-filter: blur(40px) saturate(180%);
@@ -73,7 +73,7 @@
 
         /* --- 卡片细节 --- */
         
-        /* 1. Profile */
+        /* Profile */
         .card-profile { grid-area: profile; }
         .avatar {
             width: 88px; height: 88px; border-radius: 50%;
@@ -86,32 +86,41 @@
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
         .tag { background: rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* 2. Status */
+        /* Status */
         .card-status { 
             grid-area: status; background: rgba(28, 28, 30, 0.9); color: white; border: none; 
             justify-content: center; align-items: center; text-align: center;
         }
         .status-dot { width: 10px; height: 10px; background: #32d74b; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 15px rgba(50, 215, 75, 0.8); animation: breathe 3s infinite ease-in-out; }
 
-        /* 3. Music (网易云黑胶版) */
+        /* Music (播放列表版样式) */
         .card-music {
             grid-area: music;
-            background: rgba(255, 255, 255, 0.65); cursor: pointer;
+            background: rgba(255, 255, 255, 0.65); 
+            /* 移除大卡片的点击事件，防止误触 */
+            /* cursor: pointer; */ 
             justify-content: center; align-items: center; padding: 15px !important; overflow: hidden;
             border-top: 3px solid #dd001b; 
         }
         .music-cover {
-            width: 80px; height: 80px; border-radius: 50%;
-            background-image: url('cover.jpg'); background-size: cover; background-position: center;
-            border: 6px solid #1a1a1a; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 70px; height: 70px; border-radius: 50%;
+            background-image: url('cover.jpg'); /* 默认固定封面 */
+            background-size: cover; background-position: center;
+            border: 5px solid #1a1a1a; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: transform 0.5s; position: relative; z-index: 2;
+            cursor: pointer; /* 封面可点击 */
         }
         .card-music.playing .music-cover { animation: spin 4s linear infinite; }
-        .music-wave-mini { display: flex; gap: 3px; height: 10px; margin-top: 15px; justify-content: center; }
-        .bar { width: 4px; background: #dd001b; border-radius: 2px; height: 4px; animation: equalizer 1s infinite ease-in-out; animation-play-state: paused; }
-        .card-music.playing .bar { animation-play-state: running; }
+        
+        .music-info { width: 100%; text-align: center; margin-top: 10px; z-index: 2; }
+        .music-title { font-size: 0.85rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+        .music-author { font-size: 0.7rem; color: #666; margin-bottom: 5px; }
+        
+        .music-controls { display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 5px; }
+        .control-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #333; opacity: 0.7; transition: 0.2s; padding: 0; }
+        .control-btn:hover { opacity: 1; transform: scale(1.2); color: var(--accent-pink); }
 
-        /* 4. Hitokoto (一言) */
+        /* Hitokoto */
         .card-hitokoto { 
             grid-area: hitokoto; justify-content: center; text-align: center; padding: 20px; 
             flex-direction: column; background: rgba(255, 255, 255, 0.75);
@@ -119,7 +128,7 @@
         #hitokoto { font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
         #hitokoto_from { font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%; }
 
-        /* 5. Contact (纯展示) */
+        /* Contact */
         .card-contact {
             grid-area: contact; background: rgba(255, 255, 255, 0.8);
             justify-content: center; align-items: center; text-align: center;
@@ -128,7 +137,7 @@
         .email-text { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-top: 5px; word-break: break-all; }
         .mail-icon { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
 
-        /* 6. Pet (像素猫) */
+        /* Pet */
         .card-pet {
             grid-area: pet; background: rgba(255, 255, 255, 0.65);
             flex-direction: column; justify-content: center; align-items: center;
@@ -139,7 +148,6 @@
         .counter-label { font-size: 0.6rem; font-weight: 800; color: #aaa; letter-spacing: 1px; margin-bottom: 2px; display: block; }
 
         @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        @keyframes equalizer { 0%, 100% { height: 4px; } 50% { height: 15px; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
@@ -151,7 +159,7 @@
 </head>
 <body>
 
-    <audio id="bgm-player" loop crossorigin="anonymous"><source src="bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm-player" crossorigin="anonymous"></audio>
 
     <div class="liquid-bg">
         <div class="blob blob-1"></div>
@@ -205,10 +213,16 @@
             </div>
         </div>
 
-        <div class="card card-music" id="music-card" onclick="toggleMusic()">
-            <div class="music-cover"></div>
-            <div class="music-wave-mini">
-                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="card card-music" id="music-card">
+            <div class="music-cover" onclick="toggleMusic()"></div>
+            <div class="music-info">
+                <div class="music-title" id="music-title">Loading...</div>
+                <div class="music-author" id="music-author">...</div>
+                <div class="music-controls">
+                    <button class="control-btn" onclick="prevTrack()">⏮</button>
+                    <button class="control-btn" onclick="toggleMusic()" id="play-btn">▶</button>
+                    <button class="control-btn" onclick="nextTrack()">⏭</button>
+                </div>
             </div>
         </div>
 
@@ -237,7 +251,7 @@
     <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 
     <script>
-        // 1. Vanilla Tilt 3D
+        // 1. Vanilla Tilt
         VanillaTilt.init(document.querySelectorAll(".card"), {
             max: 10, speed: 400, glare: true, "max-glare": 0.3, scale: 1.02
         });
@@ -261,14 +275,71 @@
             })
             .catch(console.error);
 
-        // 4. Audio Visualizer (Right Half Only)
+        // 4. Music Logic with Playlist
+        const playlist = [
+            { title: "Army Of Two Street Scene", author: "Music", src: "01. Army Of Two Street Scene.flac" },
+            { title: "Breathe Again", author: "Music", src: "02. Breathe Again.flac" },
+            { title: "Army Of Two", author: "Music", src: "03. Army Of Two.flac" },
+            { title: "Miserere mei, Deus", author: "Classical", src: "04. Miserere mei, Deus.flac" },
+            { title: "All I See", author: "Music", src: "05. All I See.flac" },
+            { title: "Give You The World", author: "Music", src: "06. Give You The World.flac" },
+            { title: "Give You The World (C&T)", author: "Music", src: "07. Give You The World (C&T ver.).flac" },
+            { title: "Day By Day", author: "Music", src: "08. Day By Day.flac" },
+            { title: "Threads", author: "Music", src: "09. Threads.flac" },
+            { title: "Take Me Now", author: "Music", src: "10. Take Me Now.flac" }
+        ];
+
+        let currentTrackIndex = 0; 
+        
+        function loadTrack(index) {
+            const track = playlist[index];
+            const audio = document.getElementById("bgm-player");
+            const title = document.getElementById("music-title");
+            const author = document.getElementById("music-author");
+
+            // 更新文字，不更新封面（因为封面固定为 cover.jpg）
+            title.innerText = track.title;
+            author.innerText = track.author;
+            
+            const isPlaying = !audio.paused;
+            audio.src = track.src;
+            
+            if (isPlaying) {
+                audio.play();
+                if (!isAudioSetup) setupAudio(); 
+            }
+        }
+
+        function prevTrack() {
+            currentTrackIndex--;
+            if (currentTrackIndex < 0) currentTrackIndex = playlist.length - 1;
+            loadTrack(currentTrackIndex);
+            playAfterSwitch();
+        }
+
+        function nextTrack() {
+            currentTrackIndex++;
+            if (currentTrackIndex >= playlist.length) currentTrackIndex = 0;
+            loadTrack(currentTrackIndex);
+            playAfterSwitch();
+        }
+
+        function playAfterSwitch() {
+            const audio = document.getElementById("bgm-player");
+            const card = document.getElementById("music-card");
+            const playBtn = document.getElementById("play-btn");
+            audio.play();
+            card.classList.add("playing");
+            playBtn.innerText = "⏸";
+            if (!isAudioSetup) setupAudio();
+            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+        }
+
+        // 5. Toggle & Visualizer Logic
         let audioContext, analyser, dataArray, source;
         let isAudioSetup = false;
         const ecgLine = document.getElementById('ecg-line');
-        const svgWidth = 500; 
-        const svgHeight = 100; 
-        const centerY = svgHeight / 2; 
-        const totalPoints = 100; 
+        const svgWidth = 500; const svgHeight = 100; const centerY = svgHeight / 2; const totalPoints = 100; 
 
         function setupAudio() {
             if (isAudioSetup) return;
@@ -295,18 +366,15 @@
             }
             analyser.getByteFrequencyData(dataArray);
             
-            // 定义波形只在右半边跳动
             const startX = svgWidth / 2; 
             const drawableWidth = svgWidth - startX;
             const stepX = drawableWidth / totalPoints;
-            let pointsStr = `0,${centerY} ${startX},${centerY} `; // 左边画直线
+            let pointsStr = `0,${centerY} ${startX},${centerY} `; 
 
             for (let i = 0; i <= totalPoints; i++) {
-                // 取样逻辑
                 let audioIndex = Math.floor(i * (dataArray.length / totalPoints) * 0.5); 
                 if (audioIndex >= dataArray.length) audioIndex = dataArray.length - 1;
                 const audioValue = dataArray[audioIndex] || 0; 
-                
                 const offset = (audioValue / 255) * (svgHeight / 2) * 0.7; 
                 const x = startX + (i * stepX);
                 const direction = (i % 2 === 0) ? 1 : -1;
@@ -316,22 +384,27 @@
             ecgLine.setAttribute('points', pointsStr.trim());
         }
 
-        // 5. Music Control
         function toggleMusic() {
             var audio = document.getElementById("bgm-player");
             var card = document.getElementById("music-card");
+            var playBtn = document.getElementById("play-btn");
             
             if (!isAudioSetup) { setupAudio(); }
             if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
 
             if (audio.paused) {
-                audio.volume = 0.3; audio.play();
+                audio.play();
                 card.classList.add("playing");
+                playBtn.innerText = "⏸";
             } else {
                 audio.pause();
                 card.classList.remove("playing");
+                playBtn.innerText = "▶";
             }
         }
+
+        document.getElementById("bgm-player").addEventListener("ended", nextTrack);
+        window.addEventListener('DOMContentLoaded', () => { loadTrack(0); });
     </script>
 </body>
 </html>
