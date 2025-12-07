@@ -46,7 +46,7 @@
             max-width: 1000px; width: 100%;
             grid-template-areas: 
                 "profile profile ecg ecg"
-                "profile profile status music"
+                "profile profile galaxy music"
                 "hitokoto hitokoto contact pet";
         }
 
@@ -73,7 +73,7 @@
 
         /* --- 卡片细节 --- */
         
-        /* Profile */
+        /* 1. Profile */
         .card-profile { grid-area: profile; }
         .avatar {
             width: 88px; height: 88px; border-radius: 50%;
@@ -86,36 +86,58 @@
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
         .tag { background: rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* Galaxy Portal */
+        /* 2. Galaxy Portal (银河铁道入口 - 动画修复版) */
         .card-galaxy {
-            grid-area: status;
+            grid-area: galaxy;
             position: relative; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
             background: #000; border: 1px solid rgba(255,255,255,0.2);
             text-decoration: none; cursor: pointer; padding: 0 !important;
         }
         .galaxy-bg {
-            position: absolute; width: 120%; height: 120%;
-            background-image: url('galaxy.jpg'); 
+            position: absolute; 
+            top: 50%; left: 50%; /* 强制居中 */
+            width: 300%; height: 300%; /* 足够大，旋转不露底 */
+            background-image: url('galaxy.jpg'); /* 使用你上传的 galaxy.jpg */
             background-size: cover; background-position: center;
             opacity: 0.8; animation: galaxy-spin 60s linear infinite;
         }
         .galaxy-core {
             position: absolute; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 80%);
-            z-index: 1; transition: 0.5s;
+            background: radial-gradient(circle, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 80%);
+            z-index: 1; transition: 0.8s;
         }
+        
+        /* 列车容器 - 动画核心 */
         .train-wrapper {
             position: absolute; z-index: 2;
+            top: 50%; left: 50%; /* 绝对居中 */
             display: flex; justify-content: center; align-items: center;
-            transform: scale(0.1) translateY(50px); opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8));
+            
+            /* 默认状态：缩小到0 (深处)，模糊，且不可见 */
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            filter: blur(10px); /* 远处模糊效果 */
+            
+            /* 动画曲线：cubic-bezier 模拟这种“慢慢加速冲出来”的感觉 */
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .train-img { width: 120px; height: auto; } 
         
-        .card-galaxy:hover .train-wrapper { opacity: 1; transform: scale(1.3) translateY(0); }
-        .card-galaxy:hover .galaxy-bg { animation-duration: 5s; filter: brightness(1.3); }
+        /* 列车图片 */
+        .train-img { 
+            width: 140px; /* 调整列车大小 */
+            height: auto; 
+            filter: drop-shadow(0 0 20px cyan); /* 发光特效 */
+        }
+        
+        /* 悬停交互 */
+        .card-galaxy:hover .train-wrapper { 
+            opacity: 1; 
+            transform: translate(-50%, -50%) scale(1.2); /* 变大冲到眼前 */
+            filter: blur(0px); /* 变清晰 */
+        }
+        
+        .card-galaxy:hover .galaxy-bg { animation-duration: 2s; filter: brightness(1.5); }
         .card-galaxy:hover .galaxy-core { background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%); }
         
         .galaxy-label {
@@ -125,7 +147,7 @@
         }
         .card-galaxy:hover .galaxy-label { color: #fff; text-shadow: 0 0 10px cyan; transform: translateY(5px); opacity: 0; }
 
-        /* Music */
+        /* 3. Music (网易云黑胶版) */
         .card-music {
             grid-area: music;
             background: rgba(255, 255, 255, 0.65); cursor: pointer;
@@ -150,7 +172,7 @@
         .control-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #333; opacity: 0.7; transition: 0.2s; padding: 0; }
         .control-btn:hover { opacity: 1; transform: scale(1.2); color: var(--accent-pink); }
 
-        /* Hitokoto */
+        /* 4. Hitokoto */
         .card-hitokoto { 
             grid-area: hitokoto; justify-content: center; text-align: center; padding: 20px; 
             flex-direction: column; background: rgba(255, 255, 255, 0.75);
@@ -158,7 +180,7 @@
         #hitokoto { font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
         #hitokoto_from { font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%; }
 
-        /* Contact */
+        /* 5. Contact */
         .card-contact {
             grid-area: contact; background: rgba(255, 255, 255, 0.8);
             justify-content: center; align-items: center; text-align: center;
@@ -167,7 +189,7 @@
         .email-text { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-top: 5px; word-break: break-all; }
         .mail-icon { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
 
-        /* Pet */
+        /* 6. Pet */
         .card-pet {
             grid-area: pet; background: rgba(255, 255, 255, 0.65);
             flex-direction: column; justify-content: center; align-items: center;
@@ -179,7 +201,10 @@
 
         @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes galaxy-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes galaxy-spin { 
+            from { transform: translate(-50%, -50%) rotate(0deg); } 
+            to { transform: translate(-50%, -50%) rotate(360deg); } 
+        }
 
         @media (max-width: 768px) {
             .bento-grid { grid-template-columns: 1fr; grid-template-areas: unset; grid-template-rows: auto; }
@@ -238,7 +263,8 @@
             <div class="galaxy-bg"></div>
             <div class="galaxy-core"></div>
             <div class="train-wrapper">
-                <img src="train.png" class="train-img" alt="Galaxy Express">
+                <img src="train.png" class="train-img" alt="Galaxy Express" onerror="this.style.display='none'; document.querySelector('.train-emoji-fallback').style.display='block';">
+                <span class="train-emoji-fallback" style="display:none; font-size:4rem;">🚂</span>
             </div>
             <div class="galaxy-label">WARP GATE</div>
         </a>
@@ -305,7 +331,7 @@
             })
             .catch(console.error);
 
-        // 4. Music Playlist (剔除了 02, 03, 05)
+        // 4. Music Playlist (保留原名和FLAC格式，剔除已删歌曲)
         const playlist = [
             { title: "Army Of Two Street Scene", author: "Music", src: "01. Army Of Two Street Scene.flac" },
             { title: "Miserere mei, Deus", author: "Classical", src: "04. Miserere mei, Deus.flac" },
@@ -328,7 +354,6 @@
             author.innerText = track.author;
             
             const isPlaying = !audio.paused;
-            // 编码处理防止空格报错
             audio.src = encodeURIComponent(track.src).replace(/%2F/g, "/"); 
             
             if (isPlaying) {
