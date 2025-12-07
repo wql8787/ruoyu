@@ -71,9 +71,7 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
         }
 
-        /* --- 卡片细节 --- */
-        
-        /* Profile */
+        /* 4. 卡片细节 */
         .card-profile { grid-area: profile; }
         .avatar {
             width: 88px; height: 88px; border-radius: 50%;
@@ -86,29 +84,25 @@
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
         .tag { background: rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* Status */
         .card-status { 
             grid-area: status; background: rgba(28, 28, 30, 0.9); color: white; border: none; 
             justify-content: center; align-items: center; text-align: center;
         }
         .status-dot { width: 10px; height: 10px; background: #32d74b; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 15px rgba(50, 215, 75, 0.8); animation: breathe 3s infinite ease-in-out; }
 
-        /* Music (播放列表版样式) */
         .card-music {
             grid-area: music;
-            background: rgba(255, 255, 255, 0.65); 
-            /* 移除大卡片的点击事件，防止误触 */
-            /* cursor: pointer; */ 
+            background: rgba(255, 255, 255, 0.65); cursor: pointer;
             justify-content: center; align-items: center; padding: 15px !important; overflow: hidden;
             border-top: 3px solid #dd001b; 
         }
         .music-cover {
             width: 70px; height: 70px; border-radius: 50%;
-            background-image: url('cover.jpg'); /* 默认固定封面 */
+            background-image: url('cover.jpg'); 
             background-size: cover; background-position: center;
             border: 5px solid #1a1a1a; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: transform 0.5s; position: relative; z-index: 2;
-            cursor: pointer; /* 封面可点击 */
+            cursor: pointer; 
         }
         .card-music.playing .music-cover { animation: spin 4s linear infinite; }
         
@@ -120,7 +114,6 @@
         .control-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #333; opacity: 0.7; transition: 0.2s; padding: 0; }
         .control-btn:hover { opacity: 1; transform: scale(1.2); color: var(--accent-pink); }
 
-        /* Hitokoto */
         .card-hitokoto { 
             grid-area: hitokoto; justify-content: center; text-align: center; padding: 20px; 
             flex-direction: column; background: rgba(255, 255, 255, 0.75);
@@ -128,7 +121,6 @@
         #hitokoto { font-weight: 700; color: var(--text-main); font-size: 1.1rem; line-height: 1.6; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
         #hitokoto_from { font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; text-align: right; width: 100%; }
 
-        /* Contact */
         .card-contact {
             grid-area: contact; background: rgba(255, 255, 255, 0.8);
             justify-content: center; align-items: center; text-align: center;
@@ -137,7 +129,6 @@
         .email-text { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-top: 5px; word-break: break-all; }
         .mail-icon { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
 
-        /* Pet */
         .card-pet {
             grid-area: pet; background: rgba(255, 255, 255, 0.65);
             flex-direction: column; justify-content: center; align-items: center;
@@ -149,6 +140,7 @@
 
         @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes galaxy-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
             .bento-grid { grid-template-columns: 1fr; grid-template-areas: unset; grid-template-rows: auto; }
@@ -203,15 +195,14 @@
             </div>
         </div>
 
-        <div class="card card-status">
-            <div>
-                <div style="display: flex; align-items: center; justify-content:center; margin-bottom:5px;">
-                    <span class="status-dot"></span>
-                    <span style="font-weight: 700; font-size: 1.1rem;">Focusing</span>
-                </div>
-                <div style="font-size: 0.75rem; opacity: 0.8;">及时行乐 / 摸鱼</div>
+        <a href="https://blog.doki.top" target="_blank" class="card card-galaxy">
+            <div class="galaxy-bg"></div>
+            <div class="galaxy-core"></div>
+            <div class="train-wrapper">
+                <span class="train-emoji">🚂</span>
             </div>
-        </div>
+            <div class="galaxy-label">WARP GATE</div>
+        </a>
 
         <div class="card card-music" id="music-card">
             <div class="music-cover" onclick="toggleMusic()"></div>
@@ -275,7 +266,7 @@
             })
             .catch(console.error);
 
-        // 4. Music Logic with Playlist
+        // 4. Music Playlist (保留原名和FLAC格式)
         const playlist = [
             { title: "Army Of Two Street Scene", author: "Music", src: "01. Army Of Two Street Scene.flac" },
             { title: "Miserere mei, Deus", author: "Classical", src: "04. Miserere mei, Deus.flac" },
@@ -294,12 +285,12 @@
             const title = document.getElementById("music-title");
             const author = document.getElementById("music-author");
 
-            // 更新文字，不更新封面（因为封面固定为 cover.jpg）
             title.innerText = track.title;
             author.innerText = track.author;
             
             const isPlaying = !audio.paused;
-            audio.src = track.src;
+            // 处理文件名空格，防止 URL 编码问题
+            audio.src = encodeURIComponent(track.src).replace(/%2F/g, "/"); 
             
             if (isPlaying) {
                 audio.play();
@@ -325,14 +316,22 @@
             const audio = document.getElementById("bgm-player");
             const card = document.getElementById("music-card");
             const playBtn = document.getElementById("play-btn");
-            audio.play();
-            card.classList.add("playing");
-            playBtn.innerText = "⏸";
-            if (!isAudioSetup) setupAudio();
-            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+            
+            // 使用 Promise 处理播放，防止快速切歌报错
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    card.classList.add("playing");
+                    playBtn.innerText = "⏸";
+                    if (!isAudioSetup) setupAudio();
+                    if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+                }).catch(error => {
+                    console.log("Playback prevented:", error);
+                });
+            }
         }
 
-        // 5. Toggle & Visualizer Logic
+        // 5. Visualizer
         let audioContext, analyser, dataArray, source;
         let isAudioSetup = false;
         const ecgLine = document.getElementById('ecg-line');
@@ -344,9 +343,12 @@
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 512; 
-            source = audioContext.createMediaElementSource(audioElement);
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
+            try {
+                source = audioContext.createMediaElementSource(audioElement);
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+            } catch(e) { console.log(e); }
+            
             const bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
             isAudioSetup = true;
@@ -390,9 +392,13 @@
             if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
 
             if (audio.paused) {
-                audio.play();
-                card.classList.add("playing");
-                playBtn.innerText = "⏸";
+                var playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        card.classList.add("playing");
+                        playBtn.innerText = "⏸";
+                    }).catch(error => console.log(error));
+                }
             } else {
                 audio.pause();
                 card.classList.remove("playing");
@@ -405,6 +411,7 @@
     </script>
 </body>
 </html>
+
 
 
 
